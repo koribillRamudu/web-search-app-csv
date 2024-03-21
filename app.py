@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import csv
 from threading import Thread
 from webcrawler import WebCrawler
 from indexer import Indexer
@@ -17,23 +16,22 @@ def search():
     global crawler
     keyword = request.args.get('keyword')
     url = request.args.get('url')
-    if keyword and url:
-        if crawler is None:
-            crawler = WebCrawler()
-        # Threading for crawling
-        crawler_thread = Thread(target=crawler.crawl, args=(url,))
-        crawler_thread.start()
-        
-        # Wait for the crawling to finish and then index documents
-        crawler_thread.join()
-        results = index_documents(keyword)
-
-        if results:
-            return jsonify(results)
-        else:
-            return jsonify({'message': 'Result not found for the given keyword and URL.'}), 404
-    else:
+    
+    if not keyword or not url:
         return jsonify({'error': 'Both keyword and URL parameters are required.'}), 400
+    
+    if crawler is None:
+        crawler = WebCrawler()
+
+    crawler_thread = Thread(target=crawler.crawl, args=(url,))
+    crawler_thread.start()
+    crawler_thread.join()
+    
+    results = index_documents(keyword)
+    if results:
+        return jsonify(results)
+    else:
+        return jsonify({'message': 'Result not found for the given keyword and URL.'}), 404
 
 def index_documents(keyword):
     indexer = Indexer()
@@ -46,31 +44,5 @@ def index_documents(keyword):
     else:
         return None
 
-@app.route('/api/csvdata', methods=['GET'])
-def csv_data():
-    data = []
-    with open('data.csv', 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            data.append(row)
-    return jsonify(data)
-
-@app.route('/api/csvdata', methods=['POST'])
-def add_data():
-    # Parse JSON data from the request
-    new_data = request.json.get('name')
-    new_data1= request.json.get('age')
-    new_data2= request.json.get('city')
-
-    if new_data:
-        # Append new data to the CSV file
-        with open('data.csv', 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([new_data,new_data1,new_data2])
-
-        return jsonify({'message': 'Data added successfully.'}), 201
-    else:
-        return jsonify({'error': 'Data field is missing from the request.'}), 400
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
