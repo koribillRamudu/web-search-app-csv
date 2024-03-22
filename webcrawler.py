@@ -12,7 +12,7 @@ class WebCrawler:
         self.links_found = 0
         self.lock = threading.Lock()
 
-    def crawl(self, url, base_url=None, depth=0, max_depth=20):
+    def crawl(self, url, base_url=None, depth=0, max_depth=50):
         if url in self.visited or depth >= max_depth or self.links_found >= 10:
             return
         self.visited.add(url)
