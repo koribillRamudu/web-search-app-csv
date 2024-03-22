@@ -1,6 +1,7 @@
 from collections import defaultdict
 import threading
 
+
 class Indexer:
     def __init__(self):
         self.index = defaultdict(list)

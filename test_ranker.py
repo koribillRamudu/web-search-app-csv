@@ -1,6 +1,7 @@
 import unittest  # Import the unittest module to create and run tests
 from ranker import Ranker  # Import the Ranker class to be tested
 
+
 class TestRanker(unittest.TestCase):  # Define a test case class for the Ranker, inheriting from unittest.TestCase
 
     def setUp(self):  # setUp method is called before each test method
@@ -18,7 +19,7 @@ class TestRanker(unittest.TestCase):  # Define a test case class for the Ranker,
 
         # Expected ranking order based on the occurrence of the keyword
         expected_rank_order = ["example.com", "example.net", "example.org"]
-        
+
         ranked_results = self.ranker.rank_results(results, index, keyword)  # Call the rank_results method
         ranked_urls = list(ranked_results.keys())  # Extract the URLs from the ranked results in their ranked order
 
@@ -34,7 +35,7 @@ class TestRanker(unittest.TestCase):  # Define a test case class for the Ranker,
         keyword = "java"  # Define a keyword that doesn't match any text in the index
 
         ranked_results = self.ranker.rank_results(results, index, keyword)  # Call the rank_results method
-        
+
         # Assert that all URLs are returned and have a score of 0 since the keyword doesn't match
         self.assertEqual(len(ranked_results), len(results))  # Check if all URLs are included
         for url in results:
@@ -50,9 +51,10 @@ class TestRanker(unittest.TestCase):  # Define a test case class for the Ranker,
         keyword = "programming"  # Define a keyword with different case
 
         ranked_results = self.ranker.rank_results(results, index, keyword)  # Call the rank_results method
-        
+
         # Assert that the keyword count is 1, demonstrating case-insensitive matching
         self.assertEqual(ranked_results["example.com"], 1)
+
 
 if __name__ == '__main__':
     unittest.main()  # Run the tests if the script is executed directly

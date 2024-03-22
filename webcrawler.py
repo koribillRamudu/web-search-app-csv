@@ -1,8 +1,9 @@
 from collections import defaultdict
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 import threading
+
 
 class WebCrawler:
     def __init__(self):

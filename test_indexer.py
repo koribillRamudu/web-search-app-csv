@@ -1,6 +1,7 @@
 import unittest
 from indexer import Indexer
 
+
 class TestIndexer(unittest.TestCase):
 
     def setUp(self):
@@ -11,7 +12,7 @@ class TestIndexer(unittest.TestCase):
         self.indexer.index_page("example.com", "Example Domain")
         self.assertIn("example.com", self.indexer.index)
         self.assertEqual(self.indexer.index["example.com"], "Example Domain")
-        
+
         # Test updating an existing page
         self.indexer.index_page("example.com", "Updated Example Domain")
         self.assertEqual(self.indexer.index["example.com"], "Updated Example Domain")
@@ -40,6 +41,7 @@ class TestIndexer(unittest.TestCase):
         results = self.indexer.search("mixed case")
         self.assertEqual(len(results), 1)
         self.assertIn("example.com", results)
+
 
 if __name__ == '__main__':
     unittest.main()

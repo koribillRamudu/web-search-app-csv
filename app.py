@@ -7,31 +7,34 @@ from ranker import Ranker
 app = Flask(__name__)
 crawler = None
 
+
 @app.route('/', methods=['GET'])
 def index():
     return "Welcome to the search API."
+
 
 @app.route('/api/search', methods=['GET'])
 def search():
     global crawler
     keyword = request.args.get('keyword')
     url = request.args.get('url')
-    
+
     if not keyword or not url:
         return jsonify({'error': 'Both keyword and URL parameters are required.'}), 400
-    
+
     if crawler is None:
         crawler = WebCrawler()
 
     crawler_thread = Thread(target=crawler.crawl, args=(url,))
     crawler_thread.start()
     crawler_thread.join()
-    
+
     results = index_documents(keyword)
     if results:
         return jsonify(results)
     else:
         return jsonify({'message': 'Result not found for the given keyword and URL.'}), 404
+
 
 def index_documents(keyword):
     indexer = Indexer()
@@ -43,6 +46,7 @@ def index_documents(keyword):
         return ranked_results
     else:
         return None
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -2,14 +2,10 @@ import unittest
 from unittest.mock import patch
 from webcrawler import WebCrawler
 
+
 class TestWebCrawler(unittest.TestCase):
     def setUp(self):
         self.crawler = WebCrawler()
-
-
-
-
-        
 
     def test_crawl(self):
         # Mocking requests.get method to avoid actual HTTP requests
@@ -76,6 +72,6 @@ class TestWebCrawler(unittest.TestCase):
         self.assertEqual(self.crawler.links_found, 1)  # Only one unique link found
         self.assertEqual(len(self.crawler.visited), 2)  # Including base URL and one link
 
-    
+
 if __name__ == '__main__':
     unittest.main()
